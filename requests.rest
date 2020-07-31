@@ -1,0 +1,13 @@
+
+###
+
+POST http://localhost:5000/score
+Content-Type: application/json
+
+{
+	"result": "Win"
+}
+
+###
+
+GET http://localhost:5000/score
