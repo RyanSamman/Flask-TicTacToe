@@ -56,6 +56,7 @@ def sanitizeData(data):
 def createGame():
 	try:
 		data = sanitizeData(request.json)
+		print("New API")
 		newGame = GameData(**data)
 		print(f"{newGame!r}")
 		db.session.add(newGame)
