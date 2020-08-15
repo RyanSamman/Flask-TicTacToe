@@ -1,71 +1,75 @@
 import re
 import os
 import json
+import dotenv
 from datetime import datetime
-from dotenv import load_dotenv
 from flask import Flask, request, Response
-from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import exc
+from flask_marshmallow import Marshmallow
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
+# A Simple REST api Backend to store Game data
 app = Flask(__name__)
+Limiter(app, key_func=get_remote_address, default_limits=["500 per day", "60 per hour"])
 
-# https://medium.com/analytics-vidhya/how-to-rate-limit-routes-in-flask-61c6c791961b#:~:text=Rate%20Limiting%20allows%20you%20to,exempt%20to%20have%20no%20limits.
-# Rate limiting
-
-load_dotenv()
+# Load .env Variables & configure app
+dotenv.load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 if DATABASE_URL is None: raise Exception("Database URL was not defined")
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize ORM
-db = SQLAlchemy(app)
-
-# Init marshmallow
-ma = Marshmallow(app)
-
-# To create tables, run:
-# db.create_all()
-
-
-class Game(db.Model):
+db = SQLAlchemy(app)  # Initialize SQL ORM (Object Relational Model)
+class GameData(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-	result = db.Column(db.String(4), nullable=False)
+	player1 = db.Column(db.String(15), nullable=False)
+	player2 = db.Column(db.String(15), nullable=False)
+	startingPlayer = db.Column(db.String(15), nullable=False)
+	moves = db.Column(db.String(15), nullable=False)
+	win = db.Column(db.Boolean(), nullable=False)
+	winner = db.Column(db.String(15), nullable=True)
+	draw = db.Column(db.Boolean(), nullable=False)
 
+	# For Debugging:
 	def __repr__(self):
-		return json.dumps({"id": self.id, "date": self.date, "name": self.name })
+		data = json.dumps({"id": self.id, "date": self.date, "name": self.name })
+		return f"<GameData {data}>"
 
-# Instructs how to return the object as JSON
+
+ma = Marshmallow(app) # Init Marshmallow (Object Serializer to convert to JSON)
 class GameSchema(ma.Schema):
 	class Meta:
-		fields = ('id', 'result', 'date')
+		fields = ('player1', 'player2', 'startingPlayer', 'moves', 'winner', 'draw')
 
-game_schema = GameSchema()
-games_schema = GameSchema(many=True)
+GameParser = GameSchema()
+GamesParser = GameSchema(many=True)
+
+
+def sanitizeData(data):
+	print(data)
+	return data
+
 
 @app.route('/score', methods=['POST'])
 def createGame():
 	try:
-		print(request.json)
-		result = request.json['result']
-		print(result)
-		if not re.match(r"^(Win|Loss|Draw)$", result): print('Invalid')
-		newGame = Game(result=result)
+		data = sanitizeData(request.json)
+		newGame = GameData(**data)
+		print(f"{newGame!r}")
 		db.session.add(newGame)
 		db.session.commit()
-		x = game_schema.jsonify(newGame)
-		return x, 201
+		return GameParser.jsonify(newGame), 201
 	except Exception as e:
-		print(e)
 		return Response(f"Invalid Request: {e}" , status=400)
 
 
 @app.route('/score', methods=['GET'])
 def getGames():
-	allGames = Game.query.all()
-	return games_schema.jsonify(allGames)
+	allGames = GameData.query.all()
+	print(f"{allGames!r}")
+	return GamesParser.jsonify(allGames)
 
 
 if __name__ == "__main__":
