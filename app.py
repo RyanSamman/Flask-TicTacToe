@@ -41,7 +41,7 @@ class GameData(db.Model):
 ma = Marshmallow(app) # Init Marshmallow (Object Serializer to convert to JSON)
 class GameSchema(ma.Schema):
 	class Meta:
-		fields = ('player1', 'player2', 'startingPlayer', 'moves', 'winner', 'draw')
+		fields = ('player1', 'player2', 'startingPlayer', 'moves', 'win', 'winner', 'draw')
 
 GameParser = GameSchema()
 GamesParser = GameSchema(many=True)
