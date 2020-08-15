@@ -34,7 +34,7 @@ class GameData(db.Model):
 
 	# For Debugging:
 	def __repr__(self):
-		data = json.dumps({"id": self.id, "date": self.date, 'moves': self.moves, 'win': self.win, 'draw': self.draw})
+		data = json.dumps({"id": self.id, 'moves': self.moves, 'win': self.win, 'draw': self.draw})
 		return f"<GameData {data}>"
 
 
