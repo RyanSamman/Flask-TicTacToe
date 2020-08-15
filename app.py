@@ -27,7 +27,7 @@ class GameData(db.Model):
 	player1 = db.Column(db.String(15), nullable=False)
 	player2 = db.Column(db.String(15), nullable=False)
 	startingPlayer = db.Column(db.String(15), nullable=False)
-	moves = db.Column(db.String(15), nullable=False)
+	moves = db.Column(db.Integer, nullable=False)
 	win = db.Column(db.Boolean(), nullable=False)
 	winner = db.Column(db.String(15), nullable=True)
 	draw = db.Column(db.Boolean(), nullable=False)
