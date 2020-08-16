@@ -8,7 +8,7 @@ Content-Type: application/json
 	"player1": "Player",
 	"player2": "AIPlayer",
 	"startingPlayer": "AIPlayer",
-	"moves": "5",
+	"moves": 5,
 	"win": true,
 	"winner": "AIPlayer",
 	"draw": false
