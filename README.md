@@ -7,6 +7,13 @@ This Server manages the backend of my TicTacToe AI Analytics, storing the data i
 # Running the Server
 ## Install dependencies
 ```
+pip install requirements.txt
+```
+
+or, more preferably
+
+```
+pipenv shell
 pipenv install
 ```
 
