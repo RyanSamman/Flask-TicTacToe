@@ -5,7 +5,13 @@ POST http://localhost:5000/score
 Content-Type: application/json
 
 {
-	"result": "Win"
+	"player1": "Player",
+	"player2": "AIPlayer",
+	"startingPlayer": "AIPlayer",
+	"moves": "5",
+	"win": true,
+	"winner": "AIPlayer",
+	"draw": false
 }
 
 ###

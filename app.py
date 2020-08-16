@@ -48,7 +48,15 @@ GamesParser = GameSchema(many=True)
 
 
 def sanitizeData(data):
-	print(data)
+	assert re.match(r'^Player$', data['player1'])
+	assert re.match(r'^(Random)?AIPlayer$', data['player2'])
+	assert re.match(r'^((Random)?AIPlayer|Player)$', data['startingPlayer'])
+	assert re.match(r'^Player$', data['player1'])
+	assert 9 >= data['moves'] >= 0
+	assert data['win'] is True or data['win'] is False
+	assert re.match(r'^((Random)?AIPlayer|Player|)$', data['winner'])
+	assert data['draw'] is True or data['draw'] is False
+
 	return data
 
 
@@ -56,14 +64,13 @@ def sanitizeData(data):
 def createGame():
 	try:
 		data = sanitizeData(request.json)
-		print("New API")
 		newGame = GameData(**data)
 		print(f"{newGame!r}")
 		db.session.add(newGame)
 		db.session.commit()
 		return GameParser.jsonify(newGame), 201
 	except Exception as e:
-		return Response(f"Invalid Request: {e}" , status=400)
+		return Response(f"Invalid Request: {e.__class__.__name__}: {e}" , status=400)
 
 
 @app.route('/score', methods=['GET'])
