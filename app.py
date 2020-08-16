@@ -2,7 +2,6 @@ import re
 import os
 import json
 import dotenv
-from datetime import datetime
 from flask import Flask, request, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -47,7 +46,9 @@ GameParser = GameSchema()
 GamesParser = GameSchema(many=True)
 
 
+# Detect most bad requests
 def sanitizeData(data):
+	# Regular Expressions Patterns to match data
 	assert re.match(r'^Player$', data['player1'])
 	assert re.match(r'^(Random)?AIPlayer$', data['player2'])
 	assert re.match(r'^((Random)?AIPlayer|Player)$', data['startingPlayer'])
@@ -60,6 +61,7 @@ def sanitizeData(data):
 	return data
 
 
+# Creating a Game Data record
 @app.route('/score', methods=['POST'])
 def createGame():
 	try:
@@ -73,6 +75,7 @@ def createGame():
 		return Response(f"Invalid Request: {e.__class__.__name__}: {e}" , status=400)
 
 
+# Getting all Game Data Records
 @app.route('/score', methods=['GET'])
 def getGames():
 	allGames = GameData.query.all()
