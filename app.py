@@ -50,14 +50,17 @@ GamesParser = GameSchema(many=True)
 # Detect most bad requests
 def sanitizeData(data):
 	# Regular Expressions Patterns to match data
-	assert re.match(r'^Player$', data['player1'])
-	assert re.match(r'^(Random)?AIPlayer$', data['player2'])
-	assert re.match(r'^((Random)?AIPlayer|Player)$', data['startingPlayer'])
-	assert re.match(r'^Player$', data['player1'])
-	assert 9 >= data['moves'] >= 0
-	assert data['win'] is True or data['win'] is False
-	assert re.match(r'^((Random)?AIPlayer|Player|)$', data['winner'])
-	assert data['draw'] is True or data['draw'] is False
+	
+	all(
+		re.match(r'^Player$', data['player1']),
+		re.match(r'^(Random)?AIPlayer$', data['player2']),
+		re.match(r'^((Random)?AIPlayer|Player)$', data['startingPlayer']),
+		re.match(r'^Player$', data['player1']),
+		9 >= data['moves'] >= 0,
+		data['win'] is True or data['win'] is False,
+		re.match(r'^((Random)?AIPlayer|Player|)$', data['winner']),
+		data['draw'] is True or data['draw'] is False
+	)
 
 	return data
 
