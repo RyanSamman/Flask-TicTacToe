@@ -29,6 +29,3 @@ To run the server in development mode, run `pipenv app.py`
 For production mode, run `pipenv run gunicorn app:app`
 
 Finally, if you want the Frontend GUI to use your server, go to `/TicTacToe/util.py` and change `SERVER_URL` to the Flask Server's URL, which will be `http://127.0.0.1:5000` by default
-
-## Deploying to Heroku
-### WIP
