@@ -51,7 +51,7 @@ GamesParser = GameSchema(many=True)
 def sanitizeData(data):
 	# Regular Expressions Patterns to match data
 	
-	all(
+	all((
 		re.match(r'^Player$', data['player1']),
 		re.match(r'^(Random)?AIPlayer$', data['player2']),
 		re.match(r'^((Random)?AIPlayer|Player)$', data['startingPlayer']),
@@ -60,7 +60,7 @@ def sanitizeData(data):
 		data['win'] is True or data['win'] is False,
 		re.match(r'^((Random)?AIPlayer|Player|)$', data['winner']),
 		data['draw'] is True or data['draw'] is False
-	)
+	))
 
 	return data
 
