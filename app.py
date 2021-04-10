@@ -89,5 +89,4 @@ def getGames():
 
 if __name__ == "__main__":
 	print('\x1b[6;30;42m' + ' Warning - Not in Production Mode! ' + '\x1b[0m')
-	app.debug = True
 	app.run()
