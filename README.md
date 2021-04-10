@@ -92,15 +92,52 @@ Finally, if you want the [Frontend GUI](https://github.com/RyanSamman/TicTacToeA
 # Routes
 
 ## GET /score
-[Retrieves a JSON response](https://ryans-ttt.herokuapp.com/score) of all the games stored on the database.
+[Retrieves a JSON response](https://ryans-ttt.herokuapp.com/score) of all the games stored on the database. 
 
-Returns the JSON data and a 200 response code if successful.
+Returns the JSON data and a 200 response code if successful. An example of the JSON data:
+```json
+[
+    {
+        "draw": true,
+        "moves": 9,
+        "player1": "Player",
+        "player2": "AIPlayer",
+        "startingPlayer": "Player",
+        "win": false,
+        "winner": ""
+    },
+    {
+        "draw": false,
+        "moves": 7,
+        "player1": "Player",
+        "player2": "AIPlayer",
+        "startingPlayer": "AIPlayer",
+        "win": true,
+        "winner": "AIPlayer"
+    }
+]
+```
+
 
 ## POST /score
 Adds a game to the database.
 
+Requires a **JSON body** along with the request, such as:
+
+```json
+{
+    "draw": false,
+    "moves": 7,
+    "player1": "Player",
+    "player2": "AIPlayer",
+    "startingPlayer": "AIPlayer",
+    "win": true,
+    "winner": "AIPlayer"
+}
+```
+
 Returns the new game added and a 201 response code if successful.
-Otherwise, will return some text along with a 400 response code.
+Otherwise, will return some error text along with a 400 response code.
 
 # Rate Limiting
 
